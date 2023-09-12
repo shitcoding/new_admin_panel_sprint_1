@@ -1,12 +1,26 @@
+import os
 from pathlib import Path
+
+import environ
+from split_settings.tools import include
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+env.read_env(Path(str(BASE_DIR)) / 'config/envs/.env')
 
-SECRET_KEY = 'django-insecure-%f(5qubia6j^v5!3uh%mu6jz56h=yvyo(qrta-)p7q#f*j$5=('
-DEBUG = True
+include(
+    'components/database.py',
+)
 
-ALLOWED_HOSTS = []
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
+
+if DEBUG:
+    SECRET_KEY = env('DJANGO_SECRET_KEY', default='wow-so-secret')
+    ALLOWED_HOSTS = ['*']
+else:
+    SECRET_KEY = env('DJANGO_SECRET_KEY')
+    ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
 
 
 INSTALLED_APPS = [
@@ -47,14 +61,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 AUTH_PASSWORD_VALIDATORS = [
