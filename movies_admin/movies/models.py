@@ -34,11 +34,49 @@ class Genre(UUIDMixin, TimeStampedMixin):
         return self.name
 
 
-class Filmwork(UUIDMixin, TimeStampedMixin):
-    class FilmworkType(models.TextChoices):
-        MOVIE = 'movie', 'Фильм'
-        TV_SHOW = 'tv_show', 'Сериал'
+class FilmworkType(models.TextChoices):
+    MOVIE = 'movie', 'Фильм'
+    TV_SHOW = 'tv_show', 'Сериал'
 
+
+class GenreFilmwork(UUIDMixin):
+    film_work = models.ForeignKey('Filmwork', on_delete=models.CASCADE)
+    genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # fmt: off
+        db_table = "content\".\"genre_film_work"
+        # fmt: on
+
+
+class Person(UUIDMixin, TimeStampedMixin):
+    full_name = models.CharField('name', max_length=255, null=False)
+
+    class Meta:
+        # fmt: off
+        db_table = "content\".\"person"
+        # fmt: on
+        verbose_name = 'Персона'
+        verbose_name_plural = 'Персоны'
+
+    def __str__(self):
+        return self.full_name
+
+
+class PersonFilmwork(UUIDMixin):
+    film_work = models.ForeignKey('Filmwork', on_delete=models.CASCADE)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE)
+    role = models.CharField('Role', max_length=255, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # fmt: off
+        db_table = "content\".\"person_film_work"
+        # fmt: on
+
+
+class Filmwork(UUIDMixin, TimeStampedMixin):
     title = models.CharField('name', max_length=255, null=False)
     description = models.TextField('description', blank=True)
     creation_date = models.DateField()
@@ -52,7 +90,12 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         choices=FilmworkType.choices,
         null=False,
     )
-    genres = models.ManyToManyField(Genre, through='GenreFilmwork')
+    genres = models.ManyToManyField(
+        Genre, through='GenreFilmwork', related_name='film_works'
+    )
+    persons = models.ManyToManyField(
+        Person, through='PersonFilmwork', related_name='film_works'
+    )
 
     class Meta:
         # fmt: off
@@ -63,13 +106,3 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
 
     def __str__(self):
         return self.title
-
-class GenreFilmwork(UUIDMixin):
-    film_work = models.ForeignKey('Filmwork', on_delete=models.CASCADE)
-    genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        # fmt: off
-        db_table = "content\".\"genre_film_work"
-        # fmt: on
