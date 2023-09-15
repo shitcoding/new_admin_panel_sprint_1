@@ -132,6 +132,9 @@ class Filmwork(UUIDMixin, CreatedMixin, ModifiedMixin):
         choices=FilmworkType.choices,
         null=False,
     )
+    file_path = models.CharField(
+        _('file path'), max_length=255, null=True, blank=True
+    )
     genres = models.ManyToManyField(
         Genre, through='GenreFilmwork', related_name='film_works'
     )
