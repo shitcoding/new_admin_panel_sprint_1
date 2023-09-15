@@ -19,7 +19,13 @@ class PostgresSaver:
 
         for obj in obj_list:
             columns = [field.name for field in fields(obj)]
-            column_names = ','.join(columns)
+            # Use the field_map to map sqlite and postgres column names
+            postgres_columns = [
+                getattr(obj, 'field_map', {}).get(column, column)
+                for column in columns
+            ]
+
+            column_names = ','.join(postgres_columns)
             column_placeholders = ','.join(['%s'] * len(columns))
 
             values = curs.mogrify(column_placeholders, astuple(obj)).decode(

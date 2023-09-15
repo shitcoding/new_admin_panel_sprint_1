@@ -15,12 +15,17 @@ class UpdatedAtMixin:
 
 
 @dataclass(frozen=True)
+class FieldMapMixin:
+    field_map: ClassVar = {'created_at': 'created', 'updated_at': 'modified'}
+
+
+@dataclass(frozen=True)
 class UUIDMixin:
     id: uuid.UUID = field(kw_only=True, default_factory=uuid.uuid4)
 
 
 @dataclass(frozen=True)
-class Filmwork(UUIDMixin, CreatedAtMixin, UpdatedAtMixin):
+class Filmwork(UUIDMixin, CreatedAtMixin, UpdatedAtMixin, FieldMapMixin):
     table_name: ClassVar = 'film_work'
     table_schema: ClassVar = 'content'
 
@@ -33,7 +38,7 @@ class Filmwork(UUIDMixin, CreatedAtMixin, UpdatedAtMixin):
 
 
 @dataclass(frozen=True)
-class Genre(UUIDMixin, CreatedAtMixin, UpdatedAtMixin):
+class Genre(UUIDMixin, CreatedAtMixin, UpdatedAtMixin, FieldMapMixin):
     table_name: ClassVar = 'genre'
     table_schema: ClassVar = 'content'
 
@@ -42,7 +47,7 @@ class Genre(UUIDMixin, CreatedAtMixin, UpdatedAtMixin):
 
 
 @dataclass(frozen=True)
-class GenreFilmwork(UUIDMixin, CreatedAtMixin):
+class GenreFilmwork(UUIDMixin, CreatedAtMixin, FieldMapMixin):
     table_name: ClassVar = 'genre_film_work'
     table_schema: ClassVar = 'content'
 
@@ -51,7 +56,7 @@ class GenreFilmwork(UUIDMixin, CreatedAtMixin):
 
 
 @dataclass(frozen=True)
-class Person(UUIDMixin, CreatedAtMixin, UpdatedAtMixin):
+class Person(UUIDMixin, CreatedAtMixin, UpdatedAtMixin, FieldMapMixin):
     table_name: ClassVar = 'person'
     table_schema: ClassVar = 'content'
 
@@ -59,7 +64,7 @@ class Person(UUIDMixin, CreatedAtMixin, UpdatedAtMixin):
 
 
 @dataclass(frozen=True)
-class PersonFilmwork(UUIDMixin, CreatedAtMixin):
+class PersonFilmwork(UUIDMixin, CreatedAtMixin, FieldMapMixin):
     table_name: ClassVar = 'person_film_work'
     table_schema: ClassVar = 'content'
 
