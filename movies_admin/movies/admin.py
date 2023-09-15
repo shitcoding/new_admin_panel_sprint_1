@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 from .models import Filmwork, Genre, GenreFilmwork, Person, PersonFilmwork
 
@@ -6,16 +7,16 @@ from .models import Filmwork, Genre, GenreFilmwork, Person, PersonFilmwork
 class GenreFilmworkInline(admin.TabularInline):
     model = GenreFilmwork
     extra = 0
-    verbose_name = 'Genre'
-    verbose_name_plural = 'Genres'
+    verbose_name = _('Genre')
+    verbose_name_plural = _('Genres')
+    autocomplete_fields = ('genre',)
 
 
 class PersonFilmworkInline(admin.TabularInline):
     model = PersonFilmwork
     extra = 0
-    verbose_name = 'Person'
-    verbose_name_plural = 'Persons'
-
+    verbose_name = _('Person')
+    verbose_name_plural = _('Persons')
     autocomplete_fields = ('person',)
 
 
@@ -41,7 +42,7 @@ class GenreAdmin(admin.ModelAdmin):
     def get_films_count(self, obj):
         return obj.film_works.count()
 
-    get_films_count.short_description = 'Number of films'
+    get_films_count.short_description = _('Total')
 
 
 @admin.register(Person)
@@ -63,7 +64,6 @@ class FilmworkAdmin(admin.ModelAdmin):
     )
 
     autocomplete_fields = ('persons',)
-    # search_fields = ('persons',)
 
     list_display = (
         'title',
@@ -96,4 +96,4 @@ class FilmworkAdmin(admin.ModelAdmin):
     def get_genres(self, obj):
         return ', '.join([genre.name for genre in obj.genres.all()])
 
-    get_genres.short_description = 'Жанры'
+    get_genres.short_description = _('Genres')
