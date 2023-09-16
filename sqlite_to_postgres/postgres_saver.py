@@ -1,8 +1,17 @@
 from dataclasses import astuple, fields
 
 import psycopg2
+
 from db_dataclasses import (Filmwork, Genre, GenreFilmwork, Person,
                             PersonFilmwork)
+
+
+def dataclass_to_pg_dict_row(obj):
+    pg_dict_row = {}
+    for field in fields(obj):
+        pg_column_name = getattr(obj, 'field_map', {}).get(field.name, field.name)
+        pg_dict_row[pg_column_name] = getattr(obj, field.name)
+    return pg_dict_row
 
 
 class PostgresSaver:
@@ -18,19 +27,10 @@ class PostgresSaver:
         curs = self.conn.cursor()
 
         for obj in obj_list:
-            columns = [field.name for field in fields(obj)]
-            # Use the field_map to map sqlite and postgres column names
-            postgres_columns = [
-                getattr(obj, 'field_map', {}).get(column, column)
-                for column in columns
-            ]
-
-            column_names = ','.join(postgres_columns)
-            column_placeholders = ','.join(['%s'] * len(columns))
-
-            values = curs.mogrify(column_placeholders, astuple(obj)).decode(
-                'utf-8'
-            )
+            pg_row = dataclass_to_pg_dict_row(obj)
+            column_names = ','.join(pg_row.keys())
+            column_placeholders = ','.join(['%s'] * len(pg_row))
+            values = curs.mogrify(column_placeholders, tuple(pg_row.values())).decode('utf-8')
 
             query = (
                 f'INSERT INTO {obj.table_schema}.{obj.table_name} ({column_names}) VALUES ({values})'
