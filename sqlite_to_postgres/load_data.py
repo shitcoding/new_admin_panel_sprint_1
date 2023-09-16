@@ -32,10 +32,16 @@ def load_from_sqlite(
 
 
 if __name__ == '__main__':
-    with sqlite_conn_context(SQLITE_DB_PATH) as sqlite_conn, psycopg2.connect(
-        **DSL, cursor_factory=DictCursor
-    ) as pg_conn:
-
-        logger.info(f'Loading data from SQLite to PostgreSQL...')
-        load_from_sqlite(sqlite_conn, pg_conn)
-        logger.info(f'Data migration completed succesfully')
+    try:
+        with sqlite_conn_context(
+            SQLITE_DB_PATH
+        ) as sqlite_conn, psycopg2.connect(
+            **DSL, cursor_factory=DictCursor
+        ) as pg_conn:
+            logger.info('Loading data from SQLite to PostgreSQL...')
+            load_from_sqlite(sqlite_conn, pg_conn)
+            logger.info('Data migration completed succesfully')
+    except psycopg2.OperationalError as e:
+        logger.error(f'Error connecting to PostgreSQL server: {e}')
+    except Exception as e:
+        logger.error(f'Error during data migration: {e}')
