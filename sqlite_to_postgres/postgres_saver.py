@@ -40,7 +40,8 @@ class PostgresSaver:
                 ).decode('utf-8')
 
                 query = (
-                    f'INSERT INTO {obj.table_schema}.{obj.table_name} ({column_names}) VALUES ({values})'
+                    f'INSERT INTO {obj.table_schema}.{obj.table_name} '
+                    f'({column_names}) VALUES ({values})'
                     f' ON CONFLICT (id) DO NOTHING'
                 )
                 curs.execute(query)

@@ -36,7 +36,8 @@ class SQLiteExtractor:
                 if not data_chunk:
                     break
                 logger.info(
-                    f'Fetched {chunk_size} entries from SQLite table: {table_name}'
+                    f'Fetched {chunk_size} entries '
+                    f'from SQLite table: {table_name}'
                 )
                 yield data_chunk
         except sqlite3.Error as e:

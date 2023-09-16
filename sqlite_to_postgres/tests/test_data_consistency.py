@@ -31,13 +31,19 @@ def test_data_consistency(table_dataclass):
         # Fetch data from SQLite
         sqlite_cursor = sqlite_conn.cursor()
         sqlite_cursor.execute(f'SELECT * FROM {table_dataclass.table_name}')
-        sqlite_data = [table_dataclass(**row) for row in sqlite_cursor.fetchall()]
+        sqlite_data = [
+            table_dataclass(**row) for row in sqlite_cursor.fetchall()
+        ]
 
         # Fetch data from PostgreSQL
         pg_cursor = pg_conn.cursor()
-        pg_cursor.execute(f'SELECT * FROM content.{table_dataclass.table_name}')
+        pg_cursor.execute(
+            f'SELECT * FROM content.{table_dataclass.table_name}'
+        )
         rows = pg_cursor.fetchall()
-        pg_data = [convert_pg_row_to_dataclass(row, table_dataclass) for row in rows]
+        pg_data = [
+            convert_pg_row_to_dataclass(row, table_dataclass) for row in rows
+        ]
 
         # Check record count
         assert len(sqlite_data) == len(
