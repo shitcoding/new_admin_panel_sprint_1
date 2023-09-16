@@ -8,6 +8,7 @@ from connectors import sqlite_conn_context
 from db_dataclasses import (Filmwork, Genre, GenreFilmwork, Person,
                             PersonFilmwork)
 from db_settings import DSL, SQLITE_DB_PATH
+from logger import logger
 from postgres_saver import PostgresSaver
 from sqlite_extractor import SQLiteExtractor
 
@@ -34,4 +35,7 @@ if __name__ == '__main__':
     with sqlite_conn_context(SQLITE_DB_PATH) as sqlite_conn, psycopg2.connect(
         **DSL, cursor_factory=DictCursor
     ) as pg_conn:
+
+        logger.info(f'Loading data from SQLite to PostgreSQL...')
         load_from_sqlite(sqlite_conn, pg_conn)
+        logger.info(f'Data migration completed succesfully')

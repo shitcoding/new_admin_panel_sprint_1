@@ -1,4 +1,5 @@
 import sqlite3
+from logger import logger
 
 
 class SQLiteExtractor:
@@ -12,6 +13,7 @@ class SQLiteExtractor:
         curs = self.conn.cursor()
         curs.execute(f'SELECT * FROM {table_name};')
         data = curs.fetchall()
+        logger.info(f'Fetched all data from SQLite table: {table_name}')
         return data
 
     def fetch_chunks(
@@ -25,4 +27,5 @@ class SQLiteExtractor:
             data_chunk = curs.fetchmany(chunk_size)
             if not data_chunk:
                 break
+            logger.info(f'Fetched {chunk_size} entries from SQLite table: {table_name}')
             yield data_chunk

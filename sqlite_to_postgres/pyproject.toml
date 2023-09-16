@@ -10,6 +10,7 @@ packages = [{include = "sqlite_to_postgres"}]
 python = "^3.11"
 psycopg2-binary = "2.9.7"
 python-dotenv = "^1.0.0"
+loguru = "^0.7.2"
 
 
 [tool.poetry.group.dev.dependencies]

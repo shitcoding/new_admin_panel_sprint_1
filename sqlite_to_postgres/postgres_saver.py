@@ -1,4 +1,5 @@
-from dataclasses import astuple, fields
+from dataclasses import fields
+from logger import logger
 
 import psycopg2
 
@@ -25,6 +26,7 @@ class PostgresSaver:
         ],
     ):
         curs = self.conn.cursor()
+        logger.info(f'Saving {len(obj_list)} entries to PosgreSQL...')
 
         for obj in obj_list:
             pg_row = dataclass_to_pg_dict_row(obj)
@@ -37,3 +39,4 @@ class PostgresSaver:
                 f' ON CONFLICT (id) DO NOTHING'
             )
             curs.execute(query)
+        logger.info(f'Succesfully processed {len(obj_list)} entries')
