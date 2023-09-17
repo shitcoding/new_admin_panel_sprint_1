@@ -136,10 +136,10 @@ class Filmwork(UUIDMixin, CreatedMixin, ModifiedMixin):
         _('file path'), max_length=255, null=True, blank=True
     )
     genres = models.ManyToManyField(
-        Genre, through='GenreFilmwork', related_name='film_works'
+        Genre, through=GenreFilmwork, related_name='film_works'
     )
     persons = models.ManyToManyField(
-        Person, through='PersonFilmwork', related_name='film_works'
+        Person, through=PersonFilmwork, related_name='film_works'
     )
 
     class Meta:
