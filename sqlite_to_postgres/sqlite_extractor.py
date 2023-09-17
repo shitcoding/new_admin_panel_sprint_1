@@ -31,10 +31,7 @@ class SQLiteExtractor:
         curs = self.conn.cursor()
         try:
             curs.execute(f'SELECT * FROM {table_name};')
-            while True:
-                data_chunk = curs.fetchmany(chunk_size)
-                if not data_chunk:
-                    break
+            while data_chunk := curs.fetchmany(chunk_size):
                 logger.info(
                     f'Fetched {chunk_size} entries '
                     f'from SQLite table: {table_name}'
