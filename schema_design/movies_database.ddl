@@ -50,6 +50,9 @@ CREATE TABLE IF NOT EXISTS content.genre_film_work (
   created timestamp with time zone NOT NULL
 );
 
+-- Unique index: a genre can't be associated multiple times with the same film
+CREATE UNIQUE INDEX genre_film_work_unique_idx ON content.genre_film_work (genre_id, film_work_id);
+
 -- Create person table
 -- (Stores persons involved in film making)
 CREATE TABLE IF NOT EXISTS content.person (
