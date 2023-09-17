@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Generator
 
 from logger import logger
 
@@ -27,7 +28,7 @@ class SQLiteExtractor:
         self,
         table_name: str,
         chunk_size: int = 100,
-    ) -> list[dict]:
+    ) -> Generator[list[dict], None, list | None]:
         curs = self.conn.cursor()
         try:
             curs.execute(f'SELECT * FROM {table_name};')
