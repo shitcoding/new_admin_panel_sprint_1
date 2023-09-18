@@ -83,10 +83,20 @@ class Person(UUIDMixin, CreatedMixin, ModifiedMixin):
         return self.full_name
 
 
+class RoleType(models.TextChoices):
+    ACTOR = 'ACTOR', _('Actor')
+    DIRECTOR = 'DIRECTOR', _('Director')
+    WRITER = 'WRITER', _('Writer')
+    PRODUCER = 'PRODUCER', _('Producer')
+    COMPOSER = 'COMPOSER', _('Composer')
+    CINEMATOGRAPHER = 'CINEMATOGRAPHER', _('Cinematographer')
+    EDITOR = 'EDITOR', _('Editor')
+
+
 class PersonFilmwork(UUIDMixin, CreatedMixin):
     film_work = models.ForeignKey('Filmwork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
-    role = models.CharField(_('role'), max_length=255, null=True)
+    role = models.CharField(_('role'), max_length=25, choices=RoleType.choices)
 
     class Meta:
         # fmt: off
