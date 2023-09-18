@@ -42,6 +42,6 @@ if __name__ == '__main__':
             load_from_sqlite(sqlite_conn, pg_conn)
             logger.info('Data migration completed succesfully')
     except psycopg2.OperationalError as e:
-        logger.error(f'Error connecting to PostgreSQL server: {e}')
+        logger.error('Error connecting to PostgreSQL server: {}', str(e))
     except Exception as e:
-        logger.error(f'Error during data migration: {e}')
+        logger.error('Error during data migration: {}', str(e))

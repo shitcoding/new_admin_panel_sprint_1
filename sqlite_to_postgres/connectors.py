@@ -30,4 +30,6 @@ def sqlite_conn_context(db_path: str) -> sqlite3.Connection:
         yield conn
         conn.close()
     except sqlite3.OperationalError as e:
-        logger.error(f"Error when trying to open SQLite database file: {e}")
+        logger.error(
+            'Error when trying to open SQLite database file: {}', str(e)
+        )

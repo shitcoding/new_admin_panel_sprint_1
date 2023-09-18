@@ -16,11 +16,13 @@ class SQLiteExtractor:
         try:
             curs.execute(f'SELECT * FROM {table_name};')
             data = curs.fetchall()
-            logger.info(f'Fetched all data from SQLite table: {table_name}')
+            logger.info('Fetched all data from SQLite table: {}', table_name)
             return data
         except sqlite3.Error as e:
             logger.error(
-                f'Error fetching data from SQLite table {table_name}: {e}'
+                'Error fetching data from SQLite table {}: {}',
+                table_name,
+                str(e),
             )
             return []
 
@@ -34,12 +36,15 @@ class SQLiteExtractor:
             curs.execute(f'SELECT * FROM {table_name};')
             while data_chunk := curs.fetchmany(chunk_size):
                 logger.info(
-                    f'Fetched {chunk_size} entries '
-                    f'from SQLite table: {table_name}'
+                    'Fetched {} entries from SQLite table: {}',
+                    chunk_size,
+                    table_name,
                 )
                 yield data_chunk
         except sqlite3.Error as e:
             logger.error(
-                f'Error fetching data from SQLite table {table_name}: {e}'
+                'Error fetching data from SQLite table {}: {}',
+                table_name,
+                str(e),
             )
             return []

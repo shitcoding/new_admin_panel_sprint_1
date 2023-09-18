@@ -28,7 +28,7 @@ class PostgresSaver:
         ],
     ):
         curs = self.conn.cursor()
-        logger.info(f'Saving {len(obj_list)} entries to PosgreSQL...')
+        logger.info('Saving {} entries to PosgreSQL...', len(obj_list))
 
         for obj in obj_list:
             try:
@@ -46,5 +46,5 @@ class PostgresSaver:
                 )
                 curs.execute(query)
             except (psycopg2.Error, psycopg2.OperationalError) as e:
-                logger.error(f'Error saving entry to PosgreSQL: {e}')
-        logger.info(f'Succesfully processed {len(obj_list)} entries')
+                logger.error('Error saving entry to PosgreSQL: {}', str(e))
+        logger.info('Succesfully processed {} entries', len(obj_list))
