@@ -54,6 +54,14 @@ class GenreFilmwork(UUIDMixin, CreatedMixin):
         # fmt: off
         db_table = "content\".\"genre_film_work"
         # fmt: on
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['genre', 'film_work'],
+                name='genre_film_work_unique_idx',
+            )
+        ]
+
         verbose_name = _('Genre')
         verbose_name_plural = _('Genres')
 
@@ -84,6 +92,14 @@ class PersonFilmwork(UUIDMixin, CreatedMixin):
         # fmt: off
         db_table = "content\".\"person_film_work"
         # fmt: on
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['film_work', 'person', 'role'],
+                name='film_work_person_role_idx',
+            )
+        ]
+
         verbose_name = _('Person')
         verbose_name_plural = _('Persons')
 
@@ -117,6 +133,13 @@ class Filmwork(UUIDMixin, CreatedMixin, ModifiedMixin):
         # fmt: off
         db_table = "content\".\"film_work"
         # fmt: on
+
+        indexes = [
+            models.Index(
+                fields=['creation_date'], name='film_work_creation_date_idx'
+            )
+        ]
+
         verbose_name = _('Filmwork')
         verbose_name_plural = _('Filmworks')
 
