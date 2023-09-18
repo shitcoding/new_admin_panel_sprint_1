@@ -46,5 +46,5 @@ class PostgresSaver:
                 )
                 curs.execute(query)
             except (psycopg2.Error, psycopg2.OperationalError) as e:
-                logger.error('Error saving entry to PosgreSQL: {}', str(e))
+                logger.exception('Error saving entry to PosgreSQL: {}', str(e))
         logger.info('Succesfully processed {} entries', len(obj_list))

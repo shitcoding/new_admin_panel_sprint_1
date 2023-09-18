@@ -19,7 +19,7 @@ class SQLiteExtractor:
             logger.info('Fetched all data from SQLite table: {}', table_name)
             return data
         except sqlite3.Error as e:
-            logger.error(
+            logger.exception(
                 'Error fetching data from SQLite table {}: {}',
                 table_name,
                 str(e),
@@ -42,7 +42,7 @@ class SQLiteExtractor:
                 )
                 yield data_chunk
         except sqlite3.Error as e:
-            logger.error(
+            logger.exception(
                 'Error fetching data from SQLite table {}: {}',
                 table_name,
                 str(e),
